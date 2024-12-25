@@ -11,7 +11,9 @@ async function dbConnect(): Promise<void> {
          console.log('DB is already Connected');
          return ; }
     try {
-        const db = await mongoose.connect(process.env.MONGODB_URI || '' , {});
+        const db = await mongoose.connect(process.env.MONGODB_URI || '' , {
+            serverSelectionTimeoutMS: 300000
+          });
         connection.isConnected = db.connections[0].readyState ;
         console.log("Connected to MongoDB");
     } catch (error) {

@@ -1,13 +1,12 @@
 import dbConnect from "@/lib/dbConnect";
 import sendEmail from "@/lib/resend";
 import bcrypt from "bcrypt";
-import { message, userModal } from "@/models/User";
-import { SuiteContext } from "node:test";
-
-export async function POST(req: Request) {
+import userModal from "@/models/User";
+export async function POST(request  : Request) {
   await dbConnect();
   try {
-    const { username, email, password } = await req.json();
+    const { username, email, password } = await request.json();
+
 
     const isUserVerifiedByUsername = await userModal.findOne({
       username,
@@ -18,7 +17,7 @@ export async function POST(req: Request) {
       return Response.json(
         {
           success: false,
-          message: "User is already verified",
+          message: "User is already verified with this username",
         },
         {
           status: 400,
@@ -27,18 +26,16 @@ export async function POST(req: Request) {
     }
 
     const isUserEmailExits = await userModal.findOne({ email });
-    const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const verifyCode = await Math.floor(100000 + Math.random() * 900000).toString();
 
     if (isUserEmailExits) {
-      if (isUserEmailExits.isVerified) {
-        return Response.json(
+        return Response.json( 
           {
             success: false,
             message: "User already exits with this email",
           },
           { status: 400 }
         );
-      }
     } else {
       const hashPassword = await bcrypt.hash(password, 10);
       const expiryDate = new Date();
@@ -73,7 +70,7 @@ export async function POST(req: Request) {
       return Response.json(
         {
           success: true,
-          message: "Verification code sent successfully",
+          message: "User registered successfully and Verification code sent successfully",
         },
         {
           status: 200,

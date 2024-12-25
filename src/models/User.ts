@@ -19,7 +19,6 @@ const messageSchema : Schema <Message>  = new Schema({
 
 });
 
-const message =  mongoose.model('Message' , messageSchema);   
 
 
 export interface User extends Document {
@@ -73,4 +72,4 @@ const userSchema : Schema <User>  = new Schema({
 
 const userModal = (mongoose.models.User as mongoose.Model<User> || mongoose.model<User>('User' , userSchema));
 
-export {userModal , message}
+export default userModal;
