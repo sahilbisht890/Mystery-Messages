@@ -4,8 +4,8 @@ import dbConnect from "@/lib/dbConnect";
 export async function POST(request: Request) {
   await dbConnect();
   try {
-    const { email, verifyCode } = await request.json();
-    const user = await userModal.findOne({ email });
+    const {username , verifyCode } = await request.json();
+    const user = await userModal.findOne({ username });
     if (!user) {
       return Response.json(
         { success: false, message: "User not found" },

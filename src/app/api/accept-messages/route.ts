@@ -3,6 +3,7 @@ import {authOptions} from "../auth/[...nextauth]/options";
 import dbConnect from "@/lib/dbConnect";
 import userModal from "@/models/User";
 import {User} from 'next-auth';
+import mongoose from "mongoose";
 
 export async function POST(request : Request) {
     await dbConnect();
@@ -37,14 +38,14 @@ export async function GET(request : Request) {
     try {
         const session = await getServerSession(authOptions);
         const user : User = session?.user as User;
-        if(!session || !session.user){
+        console.log('session Value'  , session , 'user' , user);
+        if(!user){
             return Response.json(
                 { success: false, message: "User not found" },
                 { status: 401 }
             )
         }
-        const userID = user._id ;
-        const {acceptMessages} = await request.json();
+        const userID = new mongoose.Types.ObjectId(user._id) ;
         const foundedUser = await userModal.findById(userID);
 
         if(!foundedUser){
@@ -57,6 +58,9 @@ export async function GET(request : Request) {
 
         return Response.json({success : true , isAcceptingMessages : foundedUser.isAcceptingMessage } , {status : 200}) 
     } catch (error) {
-        
+        return Response.json(
+            { success: false, message: "Server Error" },
+            { status: 500 }
+        )
     }    
 }

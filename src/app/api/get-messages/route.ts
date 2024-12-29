@@ -10,7 +10,7 @@ export async function GET(request : Request) {
     try {
         const session = await getServerSession(authOptions);
         const user : User = session?.user as User;
-        if(!session || !session.user){
+        if(!user){
             return Response.json(
                 { success: false, message: "Not Authenticated" },
                 { status: 401 }
@@ -19,7 +19,7 @@ export async function GET(request : Request) {
         const userID = new mongoose.Types.ObjectId(user._id);
         const searchUser = await userModal.aggregate([
             {$match : {
-                 id : userID
+                 _id : userID
             }} ,
             {
                 $unwind : "$message"
@@ -32,12 +32,13 @@ export async function GET(request : Request) {
                 $group : {
                     _id : "$_id",
                     messages : {
-                        $push : "$messages"
+                        $push : "$message"
                     }
 
                 }
             }
-        ])
+        ]).option({ maxTimeMS: 20000 });
+        console.log('search User',searchUser)
 
         if(!searchUser || searchUser.length === 0)  {
             return Response.json({
