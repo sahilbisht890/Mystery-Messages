@@ -23,7 +23,7 @@ import ApiResponse from '@/types/apiResponses';
 
 type MessageCardProps = {
   message: Message;
-  onMessageDelete: (messageId: string) => void;
+  onMessageDelete: (messageId: any) => void;
 };
 
 export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
@@ -37,8 +37,9 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
       toast({
         title: response.data.message,
       });
-      // onMessageDelete(message._id);
-
+      if(response.data.success) {
+        onMessageDelete(message._id);
+      }
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
@@ -58,7 +59,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant='destructive'>
-                <X className="w-5 h-5" />
+                <X className="w-3 h-3" />
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -80,7 +81,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
             </AlertDialogContent>
           </AlertDialog>
         </div>
-        <div className="text-sm">
+        <div className="text-sm text-gray-900 font-semibold">
           {dayjs(message.createdAt).format('MMM D, YYYY h:mm A')}
         </div>
       </CardHeader>
