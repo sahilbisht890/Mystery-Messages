@@ -14,6 +14,7 @@ import { useSession } from 'next-auth/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { acceptMessageSchema } from '@/schemas/acceptMessageSchema';
+import { MessageCard } from '@/components/messageCard';
 
 export default function Dashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -52,7 +53,7 @@ export default function Dashboard() {
     } finally {
       setIsSwitchLoading(false);
     }
-  }, [setValue, toast]);
+  }, [setValue]);
 
   const fetchMessages = useCallback(
     async (refresh: boolean = false) => {
@@ -80,14 +81,14 @@ export default function Dashboard() {
         setIsSwitchLoading(false);
       }
     },
-    [setIsLoading, setMessages, toast]
+    [setIsLoading, setMessages]
   );
 
   useEffect(() => {
     if (!session || !session.user) return;
     fetchMessages();
     fetchAcceptMessages();
-  }, []);
+  }, [session]);
 
   const handleSwitchChange = async () => {
     try {
@@ -130,8 +131,8 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-gray-700 rounded w-full max-w-6xl">
-      <h1 className="text-4xl font-bold mb-4  text-black">User Dashboard</h1>
+    <div className="py-6 px-12 bg-gray-800 text-white  w-full ">
+      <h1 className="text-5xl font-bold mb-4  text-white text-center">User Dashboard</h1>
 
       <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
@@ -140,20 +141,20 @@ export default function Dashboard() {
             type="text"
             value={profileUrl}
             disabled
-            className="input input-bordered w-full p-2 mr-2"
+            className="input input-bordered w-full rounded p-2 mr-2"
           />
           <Button onClick={copyToClipboard}>Copy</Button>
         </div>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 flex items-center">
         <Switch
           {...register('acceptMessages')}
           checked={acceptMessages}
           onCheckedChange={handleSwitchChange}
           disabled={isSwitchLoading}
         />
-        <span className="ml-2">
+        <span className="ml-2  font-normal">
           Accept Messages: {acceptMessages ? 'On' : 'Off'}
         </span>
       </div>
@@ -174,8 +175,20 @@ export default function Dashboard() {
         )}
       </Button>
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+      {messages.length > 0 ? (
+          messages.map((message, index) => (
+            <MessageCard
+            key={index}
+            message={message}
+              onMessageDelete={handleDeleteMessage}
+            />
+          ))
+        ) : (
+          <p>No messages to display.</p>
+        )}
 
       </div>
     </div>
+
   );
 }
