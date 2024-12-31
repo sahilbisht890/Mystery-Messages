@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { useToast } from "@/hooks/use-toast";
 import { Message } from "@/models/User";
 import ApiResponse from "@/types/apiResponses";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,14 +14,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { acceptMessageSchema } from "@/schemas/acceptMessageSchema";
 import { MessageCard } from "@/components/messageCard";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import toast from "react-hot-toast";
+
 
 function Dashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
   const [apiCalled , setApiCalled] = useState(false);
-
-  const { toast } = useToast();
+  const router = useRouter()
 
   const handleDeleteMessage = async (messageId : string) => {
     setMessages(messages.filter((message) => message._id !== messageId));
@@ -42,15 +44,14 @@ function Dashboard() {
     try {
       const response = await axios.get<ApiResponse>("/api/accept-messages");
       setValue("acceptMessages", response.data.isAcceptingMessages);
+      if(response.data.success){
+        toast.success(response.data.message);
+      }else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
-      toast({
-        title: "Error",
-        description:
-          axiosError.response?.data.message ??
-          "Failed to fetch message settings",
-        variant: "destructive",
-      });
+      toast.error('Failed to fetch message settings');
     } finally {
       setIsSwitchLoading(false);
     }
@@ -62,20 +63,14 @@ function Dashboard() {
       try {
         const response = await axios.get<ApiResponse>("/api/get-messages");
         setMessages(response.data.messages || []);
-        if (refresh) {
-          toast({
-            title: "Refreshed Messages",
-            description: "Showing latest messages",
-          });
+        if (response.data.success) {
+          toast.success('Message refreshed Successfully');
+        }else {
+          toast.error('Error while refreshing message');
         }
       } catch (error) {
         const axiosError = error as AxiosError<ApiResponse>;
-        toast({
-          title: "Error",
-          description:
-            axiosError.response?.data.message ?? "Failed to fetch messages",
-          variant: "destructive",
-        });
+        toast.error('Error while fetching messages');
       } finally {
         setIsLoading(false);
         setIsSwitchLoading(false);
@@ -95,24 +90,35 @@ function Dashboard() {
         acceptMessages: !acceptMessages,
       });
       setValue("acceptMessages", !acceptMessages);
-      toast({
-        title: response.data.message,
-        variant: "default",
-      });
+      if(response.data.success){
+        toast.success(response.data.message);
+      }else {
+        toast.error(response.data.message);
+      }
+
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
-      toast({
-        title: "Error",
-        description:
-          axiosError.response?.data.message ??
-          "Failed to update message settings",
-        variant: "destructive",
-      });
+      toast.error(
+          "Failed to update message settings");
     }
   };
 
   if (!session || !session.user) {
-    return <div></div>;
+    return <div className="flex items-center justify-center text-white min-h-screen bg-gray-800">
+    <div className="text-center">
+      <h2 className="text-xl font-semibold">Please sign in or sign up</h2>
+      <Link href="/sign-in">
+        <div className="mt-4 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
+          Sign In
+        </div>
+      </Link>
+      <Link href="/sign-up">
+        <div className="mt-4 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
+          Sign Up
+        </div>
+      </Link>
+    </div>
+  </div>;
   }
 
 
@@ -123,10 +129,7 @@ function Dashboard() {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(profileUrl);
-    toast({
-      title: "URL Copied!",
-      description: "Profile URL has been copied to clipboard.",
-    });
+    toast.success('Profile URL has been copied to clipboard.');
   };
 
   return (

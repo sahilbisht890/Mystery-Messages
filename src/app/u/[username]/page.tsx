@@ -22,13 +22,12 @@ import ApiResponse from "@/types/apiResponses";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { messageSchema } from "@/schemas/messageSchema";
-import { useToast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 
 const initialMessageString =
   "What's your favorite movie?||Do you have any pets?||What's your dream job?";
 
 export default function SendMessage() {
-  const { toast } = useToast();
   const params = useParams<{ username: string }>();
   const username = params.username;
   const [suggestMessage, setSuggestedMessage] = useState([]);
@@ -55,20 +54,15 @@ export default function SendMessage() {
         ...data,
         username,
       });
-
-      toast({
-        title: response.data.message,
-        variant: "default",
-      });
+      if(response.data.success){
+        toast.success(response.data.message);
+      }else {
+        toast.error(response.data.message);
+      }
       form.reset({ ...form.getValues(), content: "" });
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
-      toast({
-        title: "Error",
-        description:
-          axiosError.response?.data.message ?? "Failed to sent message",
-        variant: "destructive",
-      });
+      toast.error(axiosError.response?.data.message ?? "Failed to sent message");
     } finally {
       setIsLoading(false);
     }

@@ -15,11 +15,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
 import { signInSchema } from '@/schemas/signInSchema';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
 
 export default function SignInForm() {
   const router = useRouter();
+  const [isSubmitting , setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -29,9 +31,8 @@ export default function SignInForm() {
     },
   });
 
-  const { toast } = useToast();
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-    console.log('data' , data);
+    setIsSubmitting(true);
     const result = await signIn('credentials', {
       redirect: false,
       identifier: data.identifier,
@@ -40,20 +41,12 @@ export default function SignInForm() {
 
     if (result?.error) {
       if (result.error === 'CredentialsSignin') {
-        toast({
-          title: 'Login Failed',
-          description: 'Incorrect username or password',
-          variant: 'destructive',
-        });
+        toast.error('Incorrect username or password')
       } else {
-        toast({
-          title: 'Error',
-          description: result.error,
-          variant: 'destructive',
-        });
+        toast.error(result.error);
       }
     }
-
+    setIsSubmitting(false);
     if (result?.url) {
       router.replace('/dashboard');
     }
@@ -92,7 +85,7 @@ export default function SignInForm() {
                 </FormItem>
               )}
             />
-            <Button className='w-full' type="submit">Sign In</Button>
+            <Button className='w-full' type="submit" disabled={isSubmitting}>Sign In</Button>
           </form>
         </Form>
         <div className="text-center mt-4">
