@@ -36,7 +36,7 @@ export async function POST(request : Request) {
         await user.message.push(messageContent as Message);
         await user.save();
 
-        return Response.json({success : true , messages : 'message sent successfully' } , {status : 200}) 
+        return Response.json({success : true , message : 'Message sent successfully' } , {status : 200}) 
     } catch (error) {
         console.log('Error while getting the messages' , error);
         return Response.json({
