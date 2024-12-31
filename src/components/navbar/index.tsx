@@ -14,7 +14,7 @@ function Navbar() {
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         {/* Left: Brand */}
         <a href="#" className="text-xl font-bold mb-4 md:mb-0">
-          True Feedback
+          Mystery Message
         </a>
 
         {/* Center: Welcome Message */}
@@ -29,14 +29,14 @@ function Navbar() {
           <Link className="text-sm font-medium hover:underline" href="/">
             Home
           </Link>
-          {session ? (
-            <>
-              <Link
+          <Link
                 className="text-sm font-medium hover:underline"
                 href="/dashboard"
               >
                 Dashboard
               </Link>
+          {session ? (
+            <>
               <Button
                 onClick={() => signOut()}
                 className="w-full md:w-auto bg-slate-100 text-black"

@@ -106,17 +106,23 @@ function Dashboard() {
   if (!session || !session.user) {
     return <div className="flex items-center justify-center text-white min-h-screen bg-gray-800">
     <div className="text-center">
-      <h2 className="text-xl font-semibold">Please sign in or sign up</h2>
+      <h2 className="text-5xl font-semibold">Please sign in or sign up</h2>
+      <div className="w-1/2 mx-auto my-5">
+          <img src='/images/Login-amico.svg'/>
+      </div>
+      <div className='flex gap-7 justify-center'>
       <Link href="/sign-in">
-        <div className="mt-4 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
+        <div className="mt-4 inline-block bg-gray-900 text-white py-2 px-4 border border-white rounded hover:scale-110 transition duration-200">
           Sign In
         </div>
       </Link>
       <Link href="/sign-up">
-        <div className="mt-4 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
+        <div className="mt-4 inline-block bg-gray-900 text-white py-2 px-4 border border-white rounded hover:scale-110 transition duration-200">
           Sign Up
         </div>
       </Link>
+      </div>
+
     </div>
   </div>;
   }

@@ -16,7 +16,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             {children}
           </div>
           <footer className="text-center p-4 md:p-6 bg-gray-900 text-white">
-            © 2023 True Feedback. All rights reserved.
+            © 2023 Mystery Message. All rights reserved.
           </footer>
           <Toaster position="top-right" reverseOrder={false} />{" "}
         </body>

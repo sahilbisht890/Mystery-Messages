@@ -44,8 +44,8 @@ export default function VerifyAccount() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-800">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
-        <div className="text-center">
+      <div className="w-full max-w-md p-6 space-y-12 bg-gray-900 text-white rounded-lg shadow-md">
+        <div className="text-center p-4">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
             Verify Your Account
           </h1>
@@ -59,12 +59,12 @@ export default function VerifyAccount() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='font-semibold'>Verification Code</FormLabel>
-                  <Input {...field} />
+                  <Input className='text-black' {...field} />
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button className='w-full' type="submit">Verify</Button>
+            <Button className='w-full border border-white' type="submit">Verify</Button>
           </form>
         </Form>
       </div>

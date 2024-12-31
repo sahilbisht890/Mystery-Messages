@@ -54,10 +54,10 @@ export default function SignInForm() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-800">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+      <div className="w-full max-w-md p-8 space-y-8 bg-gray-900 border border-white text-white rounded-lg shadow-md">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-            Welcome Back to True Feedback
+            Welcome Back to Mystery Message
           </h1>
           <p className="mb-4">Sign in to continue your secret conversations</p>
         </div>
@@ -68,8 +68,8 @@ export default function SignInForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email/Username</FormLabel>
-                  <Input {...field} />
+                  <FormLabel className='font-semibold'>Email/Username</FormLabel>
+                  <Input className='text-black' {...field} />
                   <FormMessage />
                 </FormItem>
               )}
@@ -79,13 +79,16 @@ export default function SignInForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <Input type="password" {...field} />
+                  <FormLabel className='font-semibold'>Password</FormLabel>
+                  <Input className='text-black' type="password" {...field} />
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button className='w-full' type="submit" disabled={isSubmitting}>Sign In</Button>
+            <div className='w-full text-center'>
+            <Button className='w-1/2  text-white border border-white hover:scale-110 transition duration-200' type="submit" disabled={isSubmitting}>Sign In</Button>
+
+            </div>
           </form>
         </Form>
         <div className="text-center mt-4">
