@@ -171,7 +171,7 @@ function Dashboard() {
       <Separator />
 
       <Button
-        className="mt-4 text-white border border-white hover:scale-110 bg-blue-800"
+        className="mt-4 text-white border border-white hover:scale-105 bg-black"
         variant="outline"
         onClick={(e) => {
           e.preventDefault();

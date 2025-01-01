@@ -22,7 +22,7 @@ export default function Footer() {
                       <circle cx="369" cy="286" r="40" fill="#2962FF"></circle>
                     </g>
                     <text fill="white" font-family="Nunito-Bold, Nunito" font-size="512" font-weight="bold">
-                      <tspan x="654" y="518">Mystery Message</tspan>
+                      <tspan x="654" y="518">Mystery<br/>Message</tspan>
                     </text>
                   </g>
                 </g>
