@@ -12,19 +12,16 @@ function Navbar() {
   return (
     <nav className="p-4 md:p-6 shadow-md bg-gray-900 text-white">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-        {/* Left: Brand */}
         <a href="#" className="text-xl font-bold mb-4 md:mb-0">
           Mystery Message
         </a>
 
-        {/* Center: Welcome Message */}
         {session && (
           <span className="text-center md:absolute md:inset-x-1/2 transform md:-translate-x-1/2 text-nowrap">
             Welcome, {user?.username || user?.email}
           </span>
         )}
 
-        {/* Right: Navigation and Auth Buttons */}
         <div className="flex items-center gap-4">
           <Link className="text-sm font-medium hover:underline" href="/">
             Home

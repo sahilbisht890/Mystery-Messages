@@ -18,6 +18,8 @@ import { useRouter } from 'next/navigation';
 import { signInSchema } from '@/schemas/signInSchema';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
+import { Loader2 } from "lucide-react";
+
 
 export default function SignInForm() {
   const router = useRouter();
@@ -69,7 +71,7 @@ export default function SignInForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='font-semibold'>Email/Username</FormLabel>
-                  <Input className='text-black' {...field} />
+                  <Input className='text-black' {...field} disabled={isSubmitting} />
                   <FormMessage />
                 </FormItem>
               )}
@@ -80,13 +82,22 @@ export default function SignInForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='font-semibold'>Password</FormLabel>
-                  <Input className='text-black' type="password" {...field} />
+                  <Input className='text-black' type="password" {...field} disabled={isSubmitting} />
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className='w-full text-center'>
-            <Button className='w-1/2  text-white border border-white hover:scale-110 transition duration-200' type="submit" disabled={isSubmitting}>Sign In</Button>
+            <Button className='w-1/2  text-white border border-white hover:scale-110 transition duration-200' type="submit" disabled={isSubmitting}>
+            {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </>
+                ) : (
+                  "Sign In"
+                )}           
+            </Button>
 
             </div>
           </form>

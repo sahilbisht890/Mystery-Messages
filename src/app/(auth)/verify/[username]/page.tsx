@@ -17,6 +17,8 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { verifySchema } from '@/schemas/verifySchema';
 import toast from 'react-hot-toast';
+import { useState } from 'react';
+import { Loader2 } from 'lucide-react';
 
 export default function VerifyAccount() {
   const router = useRouter();
@@ -24,8 +26,10 @@ export default function VerifyAccount() {
   const form = useForm<z.infer<typeof verifySchema>>({
     resolver: zodResolver(verifySchema),
   });
+  const [isSubmitting , setIsSubmitting] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof verifySchema>) => {
+    setIsSubmitting(true);
     try {
       const response = await axios.post<ApiResponse>(`/api/verify-code`, {
         username: params.username,
@@ -39,6 +43,8 @@ export default function VerifyAccount() {
       const axiosError = error as AxiosError<ApiResponse>;
       toast.error(axiosError.response?.data.message ??
         'An error occurred. Please try again.')
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -59,12 +65,21 @@ export default function VerifyAccount() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='font-semibold'>Verification Code</FormLabel>
-                  <Input className='text-black' {...field} />
+                  <Input className='text-black' {...field} disabled={isSubmitting} />
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button className='w-full border border-white' type="submit">Verify</Button>
+            <Button className='w-full border border-white' type="submit" disabled={isSubmitting}>
+            {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </>
+                ) : (
+                  "verify"
+                )}
+            </Button>
           </form>
         </Form>
       </div>

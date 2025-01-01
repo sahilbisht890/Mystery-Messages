@@ -36,7 +36,7 @@ export default function SignUpForm() {
     defaultValues: {
       username: "",
       email: "",
-      password: "",
+      password: "", 
     },
   });
 

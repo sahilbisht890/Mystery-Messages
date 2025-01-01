@@ -27,7 +27,7 @@ export async function POST(request : Request) {
         })
         }       
 
-        return Response.json({success : true , user : updatedUser} , {status : 200}) 
+        return Response.json({success : true , user : updatedUser , message : 'User updated Sucessfully'} , {status : 200}) 
     } catch (error) {
         
     }    
@@ -38,7 +38,6 @@ export async function GET(request : Request) {
     try {
         const session = await getServerSession(authOptions);
         const user : User = session?.user as User;
-        console.log('session Value'  , session , 'user' , user);
         if(!user){
             return Response.json(
                 { success: false, message: "User not found" },
@@ -56,7 +55,7 @@ export async function GET(request : Request) {
         })
         }       
 
-        return Response.json({success : true , isAcceptingMessages : foundedUser.isAcceptingMessage } , {status : 200}) 
+        return Response.json({success : true , isAcceptingMessages : foundedUser.isAcceptingMessage , message : 'Status Fetched Successfully'} , {status : 200}) 
     } catch (error) {
         return Response.json(
             { success: false, message: "Server Error" },
