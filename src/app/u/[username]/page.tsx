@@ -111,12 +111,12 @@ export default function SendMessage() {
             />
             <div className="flex justify-center">
               {isLoading ? (
-                <Button disabled>
+                <Button className="border border-white" disabled>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Please wait
                 </Button>
               ) : (
-                <Button type="submit" disabled={isLoading || !messageContent}>
+                <Button className="border border-white hover:scale-110" type="submit" disabled={isLoading || !messageContent}>
                   Send It
                 </Button>
               )}
@@ -128,11 +128,18 @@ export default function SendMessage() {
           <div className="space-y-2">
             <Button
               onClick={fetchSuggestedMessages}
-              className="my-4"
+              className="my-4 border border-white hover:scale-110"
               disabled={isLoading}
             >
-              Suggest Messages
-            </Button>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading ...
+                  </>
+                ) : (
+                  "Suggest Messages"
+                )}
+             </Button>
             <p>Click on any message below to select it.</p>
           </div>
           <Card>
@@ -157,7 +164,7 @@ export default function SendMessage() {
         <div className="text-center">
           <div className="mb-4">Get Your Message Board</div>
           <Link href={"/sign-up"}>
-            <Button>Create Your Account</Button>
+            <Button className="border border-white hover:scale-110">Create Your Account</Button>
           </Link>
         </div>
       </div>
