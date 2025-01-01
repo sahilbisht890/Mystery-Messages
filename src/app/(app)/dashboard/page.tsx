@@ -171,17 +171,20 @@ function Dashboard() {
       <Separator />
 
       <Button
-        className="mt-4"
+        className="mt-4 text-white border border-white hover:scale-110 bg-blue-800"
         variant="outline"
         onClick={(e) => {
           e.preventDefault();
           fetchMessages(true);
         }}
       >
-        {isLoading ? (
+        {isLoading ? ( <>
           <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          <RefreshCcw className="h-4 w-4 text-black" />
+          Loading ... 
+        </>
+        ) : (<>
+              <RefreshCcw className="h-4 w-4" /> Refresh Message
+        </>
         )}
       </Button>
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
