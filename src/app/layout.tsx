@@ -2,6 +2,7 @@ import Navbar from "@/components/navbar";
 import AuthProvider from "@/context/AuthProvider";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import Footer from "@/components/footer";
 interface RootLayoutProps {
   children: React.ReactNode;
 }
@@ -15,9 +16,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             <Navbar />
             {children}
           </div>
-          <footer className="text-center p-4 md:p-6 bg-gray-900 text-white">
-            © 2023 Mystery Message. All rights reserved.
-          </footer>
+          <Footer/>
           <Toaster position="top-right" reverseOrder={false} />{" "}
         </body>
       </AuthProvider>
