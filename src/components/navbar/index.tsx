@@ -39,7 +39,7 @@ function Navbar() {
             <>
               <Button
                 onClick={() => signOut({
-                  callbackUrl: '/',
+                redirect:false
                 })}
                 className="w-full md:w-auto bg-slate-100 text-black"
                 variant="outline"
