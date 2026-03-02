@@ -40,12 +40,7 @@ Mystery Message is a full-stack web application that allows users to sign up, ve
 - **Render**: The application is deployed using Render.
   
 ### Screenshots:
-![Screenshot (16)](https://github.com/user-attachments/assets/a5ab674f-785d-416f-a7ff-b820dfa14c06)
-![Screenshot (15)](https://github.com/user-attachments/assets/f7ead7c8-962a-4328-8563-e9eaac696551)
-
-![Screenshot (14)](https://github.com/user-attachments/assets/b7153190-8c4d-4892-8976-122b3b8a6532)
-![Screenshot (13)](https://github.com/user-attachments/assets/7234425e-0335-4776-a00d-d347f0f5340b)
-![Screenshot (17)](https://github.com/user-attachments/assets/ff2faa61-e352-4c6b-ae94-4b3863061078)
+<img width="1920" height="2210" alt="screencapture-mystery-messages-onrender-2026-03-02-21_46_53" src="https://github.com/user-attachments/assets/4498157d-fa41-4bfb-a239-1ddcb324d56c" />
 
 
 
@@ -140,4 +135,5 @@ This project is licensed under the [MIT License](LICENSE).
 - [MailerSend](https://www.mailersend.com/)
 - [NextAuth.js](https://next-auth.js.org/)
 - [Gimni AI](https://gimni.ai/)
+
 
