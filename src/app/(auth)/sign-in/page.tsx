@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "@/schemas/signInSchema";
 import toast from "react-hot-toast";
@@ -23,6 +24,7 @@ import { Loader2, LockKeyhole, MessageCircleHeart } from "lucide-react";
 export default function SignInForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -53,6 +55,11 @@ export default function SignInForm() {
     if (result?.url) {
       router.replace("/dashboard");
     }
+  };
+
+  const onGoogleSignIn = async () => {
+    setIsGoogleSubmitting(true);
+    await signIn("google", { callbackUrl: "/dashboard" });
   };
 
   return (
@@ -132,6 +139,31 @@ export default function SignInForm() {
             </Button>
           </form>
         </Form>
+
+        <div className="my-5 flex items-center gap-3">
+          <div className="h-px flex-1 bg-white/15" />
+          <span className="text-xs text-slate-400">OR</span>
+          <div className="h-px flex-1 bg-white/15" />
+        </div>
+
+        <Button
+          type="button"
+          onClick={onGoogleSignIn}
+          disabled={isGoogleSubmitting}
+          className="w-full rounded-xl border border-white/20 bg-white/10 text-white hover:bg-white/15"
+        >
+          {isGoogleSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Redirecting...
+            </>
+          ) : (
+            <>
+              <Image src="/images/google.svg" alt="Google" width={16} height={16} />
+              Continue with Google
+            </>
+          )}
+        </Button>
 
         <p className="mt-6 text-center text-sm text-slate-300">
           Not a member yet?{" "}

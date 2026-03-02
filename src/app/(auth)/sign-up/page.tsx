@@ -3,6 +3,7 @@
 import ApiResponse from "@/types/apiResponses";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -21,11 +22,13 @@ import { useRouter } from "next/navigation";
 import { signUpSchema } from "@/schemas/signUpSchema";
 import { useDebounceValue } from "usehooks-ts";
 import toast from "react-hot-toast";
+import { signIn } from "next-auth/react";
 
 export default function SignUpForm() {
   const [usernameMessage, setUsernameMessage] = useState("");
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
   const [debouncedUsername, setUsername] = useDebounceValue("", 300);
   const router = useRouter();
 
@@ -82,6 +85,11 @@ export default function SignUpForm() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const onGoogleSignIn = async () => {
+    setIsGoogleSubmitting(true);
+    await signIn("google", { callbackUrl: "/dashboard" });
   };
 
   const isUnique = usernameMessage === "Username is unique";
@@ -199,6 +207,31 @@ export default function SignUpForm() {
             </Button>
           </form>
         </Form>
+
+        <div className="my-5 flex items-center gap-3">
+          <div className="h-px flex-1 bg-white/15" />
+          <span className="text-xs text-slate-400">OR</span>
+          <div className="h-px flex-1 bg-white/15" />
+        </div>
+
+        <Button
+          type="button"
+          onClick={onGoogleSignIn}
+          disabled={isGoogleSubmitting}
+          className="w-full rounded-xl border border-white/20 bg-white/10 text-white hover:bg-white/15"
+        >
+          {isGoogleSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Redirecting...
+            </>
+          ) : (
+            <>
+              <Image src="/images/google.svg" alt="Google" width={16} height={16} />
+              Continue with Google
+            </>
+          )}
+        </Button>
 
         <p className="mt-6 text-center text-sm text-slate-300">
           Already a member?{" "}

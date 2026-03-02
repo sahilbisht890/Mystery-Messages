@@ -1,11 +1,16 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import dbConnect from "@/lib/dbConnect";
 import bcrypt from "bcrypt";
 import userModal from "@/models/User";
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
     CredentialsProvider({
       id: "credentials",
       name: "Credentials",
@@ -45,18 +50,86 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+     async signIn({ user, account }) {
+      if (account?.provider !== "google") return true;
+      if (!user.email) return false;
+
+      await dbConnect();
+
+      const existingUser = await userModal.findOne({ email: user.email });
+
+      if (existingUser) {
+        if (!existingUser.isVerified) {
+          existingUser.isVerified = true;
+          await existingUser.save();
+        }
+        return true;
+      }
+
+      const baseName = (user.name || user.email.split("@")[0] || "user")
+        .replace(/[^a-zA-Z0-9]/g, "")
+        .toLowerCase()
+        .slice(0, 12) || "user";
+
+      let generatedUsername = `${baseName}${Math.floor(100 + Math.random() * 900)}`;
+      let usernameExists = await userModal.findOne({ username: generatedUsername });
+
+      while (usernameExists) {
+        generatedUsername = `${baseName}${Math.floor(100 + Math.random() * 900)}`;
+        usernameExists = await userModal.findOne({ username: generatedUsername });
+      }
+
+      const randomPassword = `${Math.random().toString(36)}${Date.now().toString(36)}`;
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
+      await userModal.create({
+        username: generatedUsername,
+        email: user.email,
+        password: hashedPassword,
+        verifyCode: "GOOGLE_AUTH",
+        verifyCodeExpire: new Date(),
+        isAcceptingMessage: true,
+        message: [],
+        isVerified: true,
+        profession: "",
+        description: "",
+        currentCompany: "",
+        gender: "",
+        age: null,
+        profilePhoto: user.image || "",
+      });
+
+      return true;
+     },
      async jwt({token , user, trigger, session}) {
+       if (user?.email) {
+         await dbConnect();
+         const dbUser = await userModal.findOne({ email: user.email });
+         if (dbUser) {
+          token._id = dbUser._id?.toString();
+          token.isVerified = !!dbUser.isVerified;
+          token.isAcceptingMessage = !!dbUser.isAcceptingMessage;
+          token.username = dbUser.username;
+          token.profession = dbUser.profession;
+          token.description = dbUser.description;
+          token.currentCompany = dbUser.currentCompany;
+          token.gender = dbUser.gender;
+          token.age = dbUser.age;
+          token.profilePhoto = dbUser.profilePhoto;
+         }
+       }
+
        if(user){
-         token._id = user._id?.toString();
-         token.isVerified = user.isVerified;
-         token.isAcceptingMessage = user.isAcceptingMessage;
-         token.username = user.username;
-         token.profession = user.profession;
-         token.description = user.description;
-         token.currentCompany = user.currentCompany;
-         token.gender = user.gender;
-         token.age = user.age;
-         token.profilePhoto = user.profilePhoto;
+         token._id = user._id?.toString() || token._id;
+         token.isVerified = user.isVerified ?? token.isVerified;
+         token.isAcceptingMessage = user.isAcceptingMessage ?? token.isAcceptingMessage;
+         token.username = user.username || token.username;
+         token.profession = user.profession ?? token.profession;
+         token.description = user.description ?? token.description;
+         token.currentCompany = user.currentCompany ?? token.currentCompany;
+         token.gender = user.gender ?? token.gender;
+         token.age = user.age ?? token.age;
+         token.profilePhoto = user.profilePhoto || token.profilePhoto;
        }
 
        if (trigger === "update" && session) {

@@ -95,25 +95,50 @@ function Dashboard() {
 
   if (!session || !session.user) {
     return (
-      <section className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-7xl items-center justify-center px-4 py-10 md:px-8">
-        <div className="glass-panel w-full max-w-3xl rounded-3xl p-8 text-center">
-          <h2 className="text-3xl font-semibold text-white md:text-4xl">Please sign in to view your dashboard</h2>
-          <div className="mx-auto my-6 w-full max-w-md">
-            <Image
-              src="/images/Login-amico.svg"
-              alt="Login illustration"
-              width={480}
-              height={480}
-              className="h-auto w-full"
-            />
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Link href="/sign-in" className="rounded-full bg-cyan-400 px-6 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300">
-              Sign In
-            </Link>
-            <Link href="/sign-up" className="rounded-full border border-white/20 bg-white/5 px-6 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
-              Sign Up
-            </Link>
+      <section className="mx-auto w-full max-w-7xl px-4 py-10 md:px-8 md:py-16">
+        <div className="glass-panel relative overflow-hidden rounded-3xl p-8 md:p-12">
+          <div className="absolute -left-12 -top-12 h-40 w-40 rounded-full bg-cyan-400/20 blur-3xl" />
+          <div className="absolute -bottom-16 right-0 h-52 w-52 rounded-full bg-orange-400/20 blur-3xl" />
+
+          <div className="relative grid items-center gap-8 md:grid-cols-2">
+            <div>
+              <p className="mb-4 inline-flex rounded-full border border-cyan-300/40 bg-cyan-300/10 px-4 py-1 text-xs uppercase tracking-[0.2em] text-cyan-200">
+                Dashboard Access
+              </p>
+              <h2 className="text-3xl font-bold leading-tight text-white md:text-5xl">
+                Sign in to unlock your anonymous inbox.
+              </h2>
+              <p className="mt-4 max-w-lg text-sm leading-7 text-slate-300 md:text-base">
+                View incoming messages, control who can contact you, and manage your profile from one clean dashboard experience.
+              </p>
+
+              <div className="mt-7 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/sign-in"
+                  className="rounded-full bg-cyan-400 px-6 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="rounded-full border border-white/20 bg-white/5 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                >
+                  Create Account
+                </Link>
+              </div>
+            </div>
+
+            <div className="mx-auto w-full max-w-md">
+              <div className="rounded-2xl border border-white/10 bg-[#0d1830]/80 p-4">
+                <Image
+                  src="/images/Login-amico.svg"
+                  alt="Login illustration"
+                  width={480}
+                  height={480}
+                  className="h-auto w-full"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
