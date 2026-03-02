@@ -45,12 +45,27 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-     async jwt({token , user}) {
+     async jwt({token , user, trigger, session}) {
        if(user){
          token._id = user._id?.toString();
          token.isVerified = user.isVerified;
          token.isAcceptingMessage = user.isAcceptingMessage;
-         token.username = user.username
+         token.username = user.username;
+         token.profession = user.profession;
+         token.description = user.description;
+         token.currentCompany = user.currentCompany;
+         token.gender = user.gender;
+         token.age = user.age;
+         token.profilePhoto = user.profilePhoto;
+       }
+
+       if (trigger === "update" && session) {
+        token.profession = session.profession;
+        token.description = session.description;
+        token.currentCompany = session.currentCompany;
+        token.gender = session.gender;
+        token.age = session.age;
+        token.profilePhoto = session.profilePhoto;
        }
       return token 
      },
@@ -60,6 +75,12 @@ export const authOptions: NextAuthOptions = {
             session.user.isVerified = token.isVerified;
             session.user.isAcceptingMessage = token.isAcceptingMessage;
             session.user.username = token.username;
+            session.user.profession = token.profession;
+            session.user.description = token.description;
+            session.user.currentCompany = token.currentCompany;
+            session.user.gender = token.gender;
+            session.user.age = token.age;
+            session.user.profilePhoto = token.profilePhoto;
        }
        return session
      },

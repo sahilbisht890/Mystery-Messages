@@ -15,6 +15,9 @@ export async function GET() {
       {
         $project: {
           username: 1,
+          profession: 1,
+          gender: 1,
+          profilePhoto: 1,
         },
       },
       {

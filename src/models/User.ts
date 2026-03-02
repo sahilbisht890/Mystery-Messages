@@ -29,7 +29,13 @@ export interface User extends Document {
     verifyCodeExpire : Date,
     isAcceptingMessage : Boolean,
     message : Message[],
-    isVerified : Boolean
+    isVerified : Boolean,
+    profession?: string,
+    description?: string,
+    currentCompany?: string,
+    gender?: string,
+    age?: number,
+    profilePhoto?: string
 }
 
 const userSchema : Schema <User>  = new Schema({
@@ -67,6 +73,30 @@ const userSchema : Schema <User>  = new Schema({
      isVerified : {
         type : Boolean,
         default : false
+     },
+     profession: {
+        type: String,
+        default: ""
+     },
+     description: {
+        type: String,
+        default: ""
+     },
+     currentCompany: {
+        type: String,
+        default: ""
+     },
+     gender: {
+        type: String,
+        default: ""
+     },
+     age: {
+        type: Number,
+        default: null
+     },
+     profilePhoto: {
+        type: String,
+        default: ""
      }
 });
 

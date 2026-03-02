@@ -49,6 +49,12 @@ export async function POST(request  : Request) {
         isAcceptingMessage: true,
         message: [],
         isVerified: false,
+        profession: "",
+        description: "",
+        currentCompany: "",
+        gender: "",
+        age: null,
+        profilePhoto: "",
       });
 
       await new_user.save();

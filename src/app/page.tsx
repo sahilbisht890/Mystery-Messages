@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import axios from "axios";
 import { Loader2, Mail, RefreshCcw, Shield, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -46,6 +47,12 @@ export default function Home() {
     } finally {
       setIsLoadingUsers(false);
     }
+  };
+
+  const getGenderShort = (gender?: string) => {
+    if (!gender) return "";
+    const letter = gender.trim().charAt(0).toUpperCase();
+    return letter === "M" || letter === "F" ? letter : "";
   };
 
   useEffect(() => {
@@ -164,8 +171,39 @@ export default function Home() {
                 href={`/u/${user.username}`}
                 className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-cyan-300/50 hover:bg-white/[0.06]"
               >
-                <p className="text-sm text-slate-400">Open inbox</p>
-                <p className="mt-1 text-lg font-semibold text-white">@{user.username}</p>
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 overflow-hidden rounded-full border border-white/20 bg-white/10">
+                    {user.profilePhoto ? (
+                      <Image
+                        src={user.profilePhoto}
+                        alt={user.username}
+                        width={40}
+                        height={40}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-xs font-semibold text-slate-200">
+                        {user.username.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-400">Open inbox</p>
+                    <p className="text-lg font-semibold text-white">@{user.username}</p>
+                  </div>
+                </div>
+                <div className="mt-3 flex items-center gap-2">
+                  {user.profession && (
+                    <span className="rounded-full border border-white/15 bg-white/5 px-2 py-1 text-xs text-slate-300">
+                      {user.profession}
+                    </span>
+                  )}
+                  {getGenderShort(user.gender) && (
+                    <span className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-2 py-1 text-xs font-semibold text-cyan-200">
+                      {getGenderShort(user.gender)}
+                    </span>
+                  )}
+                </div>
                 <p className="mt-3 text-xs text-cyan-300">Send anonymous message</p>
               </Link>
             ))

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "../ui/button";
 
@@ -32,12 +33,37 @@ function Navbar() {
           >
             Dashboard
           </Link>
+          {session && (
+            <Link
+              className="rounded-full px-3 py-2 text-sm text-slate-200 transition hover:bg-white/10 hover:text-white"
+              href="/profile"
+            >
+              Profile
+            </Link>
+          )}
 
           {session ? (
             <>
-              <span className="hidden rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs text-slate-200 lg:inline-flex">
-                {user?.username || user?.email}
-              </span>
+              <div className="hidden items-center gap-2 rounded-full border border-white/15 bg-white/5 px-2 py-1 lg:inline-flex">
+                <div className="h-8 w-8 overflow-hidden rounded-full border border-white/20 bg-white/10">
+                  {user?.profilePhoto ? (
+                    <Image
+                      src={user.profilePhoto}
+                      alt="Profile"
+                      width={32}
+                      height={32}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-xs font-semibold text-slate-200">
+                      {(user?.username || user?.email || "U").charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                </div>
+                <span className="pr-2 text-xs text-slate-200">
+                  {user?.username || user?.email}
+                </span>
+              </div>
               <Button
                 onClick={() => signOut({ redirect: false })}
                 className="rounded-full bg-white text-slate-900 hover:bg-cyan-200"
