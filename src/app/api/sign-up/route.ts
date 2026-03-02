@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import sendEmail from "@/lib/nodemailer";
+import sendEmail from "@/lib/mailersend";
 import bcrypt from "bcrypt";
 import userModal from "@/models/User";
 export async function POST(request  : Request) {

@@ -33,7 +33,7 @@ Mystery Message is a full-stack web application that allows users to sign up, ve
 ### Backend:
 - **Next.js**: Backend APIs built with Next.js.
 - **Mongoose**: For interacting with MongoDB.
-- **Nodemailer**: To send email verification codes.
+- **MailerSend**: To send email verification codes.
 - **NextAuth.js**: For authentication and session management.
 
 ### Deployment:
@@ -70,8 +70,8 @@ Mystery Message is a full-stack web application that allows users to sign up, ve
    NEXTAUTH_SECRET=your-nextauth-secret
    NEXTAUTH_URL=http://localhost:3000
    MONGODB_URI=your-mongodb-connection-string
-   EMAIL=your-email@gmail.com
-   EMAIL_PASSWORD=your-email-app-password
+   MAILERSEND_API_KEY=your-mailersend-api-key
+   MAILERSEND_FROM_EMAIL=your-verified-sender-email
    GIMNI_AI_API_KEY=your-gimni-ai-api-key
    ```
 
@@ -137,7 +137,7 @@ This project is licensed under the [MIT License](LICENSE).
 - [Next.js](https://nextjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [shadcn](https://ui.shadcn.dev/)
-- [Nodemailer](https://nodemailer.com/)
+- [MailerSend](https://www.mailersend.com/)
 - [NextAuth.js](https://next-auth.js.org/)
 - [Gimni AI](https://gimni.ai/)
 

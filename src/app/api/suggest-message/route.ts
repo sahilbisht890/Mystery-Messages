@@ -1,34 +1,59 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    
-    const prompt = "Create a list of three open-ended and engaging questions , create question randomly formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment.";
-    const genAI = new GoogleGenerativeAI(process.env.AI_API_KEY || "");
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const result = await model.generateContent(prompt);
-    const fetchedResult = result.response.text();
-    const data = fetchedResult.split('||');
+    const apiKey = process.env.AI_API_KEY;
+
+    if (!apiKey) {
+      return Response.json(
+        {
+          success: false,
+          message: "AI_API_KEY is not configured",
+        },
+        { status: 500 }
+      );
+    }
+
+    const prompt = `
+Create a list of three open-ended and engaging questions.
+Return them as a single string separated strictly by "||".
+Avoid sensitive topics. Keep it friendly and universal.
+Example format:
+Question one?||Question two?||Question three?
+`;
+
+    const ai = new GoogleGenAI({ apiKey });
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
+
+    const text = response.text;
+
+    if (!text) {
+      throw new Error("Empty response from Gemini");
+    }
+
+    const data = text.split("||").map((q) => q.trim());
+
     return Response.json(
       {
         success: true,
-        message: "text is generated",
-        data
+        message: "Text generated successfully",
+        data,
       },
-      {
-        status: 200,
-      }
+      { status: 200 }
     );
   } catch (error) {
-    console.log("Error while generating the prompt", error);
+    console.error("Gemini generation error:", error);
+
     return Response.json(
       {
         success: false,
-        message: "Internal Server Error",
+        message: "AI generation failed",
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }

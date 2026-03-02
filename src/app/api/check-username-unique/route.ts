@@ -16,13 +16,12 @@ export async function GET(request: Request) {
         }
 
         const result = usernameQuerySchema.safeParse(queryParam);
-        console.log('zod safeParse output' , result);
         if(!result.success){
             const usernameErrors = result.error.format().username?._errors || []
             return Response.json({
                 success : false ,
                 message : usernameErrors?.length > 0 ? usernameErrors.join(',') : 
-                'Inalid username'
+                'Invalid username'
             } , {
                 status : 400
             })
@@ -52,7 +51,7 @@ export async function GET(request: Request) {
     console.log('Error checking while username' , error);
     return Response.json({
         success : false ,
-        message : 'Error while checking username'
+        message : error instanceof Error ? error.message : 'Error while checking username'
     } ,{
         status:500
     })
