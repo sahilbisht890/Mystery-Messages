@@ -59,10 +59,13 @@ export const authOptions: NextAuthOptions = {
       const existingUser = await userModal.findOne({ email: user.email });
 
       if (existingUser) {
+        if (user.image && !existingUser.profilePhoto) {
+          existingUser.profilePhoto = user.image;
+        }
         if (!existingUser.isVerified) {
           existingUser.isVerified = true;
-          await existingUser.save();
         }
+        await existingUser.save();
         return true;
       }
 
