@@ -10,5 +10,6 @@ export default interface apiResponse {
     message : string ,
     isAcceptingMessages? : boolean ,
     messages? : Array<Message>,
-    users?: Array<PublicUserSummary>
+    users?: Array<PublicUserSummary>,
+    data?: Array<string>
 }
